@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>04_class与style绑定</title>
+  <style>
+    .aClass {
+      color: rebeccapurple;
+    }
+
+    .bClass {
+      color: red;
+    }
+
+    .cClass {
+      font-size: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!--
+1. 理解
+  在应用界面中, 某个(些)元素的样式是变化的
+  class/style绑定就是专门用来实现动态样式效果的技术
+2. class绑定: :class='xxx'
+  xxx是字符串
+  xxx是对象
+  xxx是数组
+3. style绑定
+  :style="{ color: activeColor, fontSize: fontSize + 'px' }"
+  其中activeColor/fontSize是data属性
+-->
+  <div id="demo">
+    <h2>1、class绑定： :class='xxx'</h2>
+    <p class="cClass" :class="a">xxx是字符串</p>
+    <p :class="{aClass: isA, cClass: isB}">xxx是对象</p>
+    <p :class="['bClass', 'cClass']">xxx是数组</p>
+    <h2>2、style绑定</h2>
+    <p :style="{color: activeColor, fontSize: fontSize + 'px'}">style绑定</p>
+    <button @click="update">更新</button>
+  </div>
+
+  <script type="text/javascript" src="../js/vue.js"></script>
+  <script>
+    new Vue({
+      el: "#demo",
+      data: {
+        a: "aClass",
+        isA: true,
+        isB: false,
+        fontSize:20,
+        activeColor: "deeppink"
+      },
+      methods: {
+        update() {
+          this.a = 'bClass';
+          this.isA = false;
+          this.isB = true;
+          this.fontSize = 30;
+          this.activeColor = "skyblue"
+        }
+      },
+    })
+  </script>
+
+  <script>
+    __label_scale__ = function (e) {
+      if (e.type === 'mousedown' || e.type === 'mouseenter') {
+        const _this = this;
+        $("#uiContent .dingButton").off("click").on("click", function (e) {
+          window._index = $(this).index('.dingButton');
+          //console.log(_this, this, $(this), $(this).index('.dingButton'));
+          window.__playerController__.fit();
+          e.originalEvent.deltaY = -100;
+          let currentLabel = document.querySelector('#'.concat(_this._uis.shape.node.id));
+          //console.log(currentLabel.getClientRects());
+          let _x = (currentLabel.getClientRects()[0].left + currentLabel.getClientRects()[0].right) / 2;
+          let _y = (currentLabel.getClientRects()[0].top + currentLabel.getClientRects()[0].bottom) / 2;
+          let _width = Math.ceil($("#rotationWrapper").width() / 2);
+          let _height = Math.ceil($("#rotationWrapper").height() / 2);
+          //e.clientX=currentLabel.getClientRects()[0].x;
+          //e.clientY=currentLabel.getClientRects()[0].y;
+          e.clientX = _x;
+          e.clientY = _y;
+          //console.log('控制器',this._uis.shape);
+          console.log(_height, _width, _y - _height, _x - _width);
+          for (let i = 0; i < 20; i++) {
+            window.__playerController__.zoom(e, $('#frameBackground')[0]);
+          }
+          window.__playerModel__.move(_height - _y, _width - _x);
+          //console.log(e.originalEvent.deltaY);
+          //console.log(this);
+        })
+      }
+    }
+
+    $(document).keydown(function (event) {
+      let _index = $("#uiContent .dingButton").length - 1;
+      if (window._index !== undefined) {
+        if (event.keyCode == 87) {
+          (window._index - 1) < 0 ? (window._index = _index) : (window._index = window._index - 1);
+          _dingwei();
+        } else if (event.keyCode == 83) {
+          (window._index + 1) > _index ? (window._index = 0) : (window._index = window._index + 1);
+          _dingwei();
+        }
+      } else {
+        if (event.keyCode == 87) {
+          window._index = _index;
+          _dingwei();
+        } else if (event.keyCode == 83) {
+          window._index = 0;
+          _dingwei();
+        }
+      }
+      if (event.keyCode == 87) {
+        // $($(".uiElement")[window._index]).mouseenter();
+
+      }else if (event.keyCode == 83) {
+
+      }
+    });
+    function _dingwei() {
+      // console.log(window._index);
+      $($(".uiElement")[window._index]).mouseenter();
+
+      $("#uiContent .highlightedUI").mouseenter()
+      let event = document.createEvent('MouseEvents');
+      event.initEvent("click", false, true);
+
+      $($(".uiElement")[window._index]).find(".dingButton")[0].dispatchEvent(event);
+
+      // $("#uiContent .highlightedUI").find(".dingButton")[0].dispatchEvent(event)
+      $(".highlightedUI")[0].scrollIntoView({ behavior: "smooth"});
+    }
+  </script>
+</body>
+
+</html>

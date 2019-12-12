@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>07_事件处理</title>
+</head>
+
+<body>
+  <!--
+1. 绑定监听:
+  v-on:xxx="fun"
+  @xxx="fun"
+  @xxx="fun(参数)"
+  默认事件形参: event
+  隐含属性对象: $event
+2. 事件修饰符:
+  .prevent : 阻止事件的默认行为 event.preventDefault()
+  .stop : 停止事件冒泡 event.stopPropagation()
+3. 按键修饰符
+  .keycode : 操作的是某个keycode值的健
+  .enter : 操作的是enter键
+-->
+  <div id="demo">
+    <h2>1：绑定监听</h2>
+    <button @click="test1">test1</button>
+    <button @click="test2('atguigu')">test2</button>
+    <button @click="test3">test3</button>
+    <button @click="test4(123, $event)">test4</button>
+
+    <h2>2：事件修饰符</h2>
+    <div style="width:200px;height:200px;background:red;" @click="test5()">
+      <div style="width: 100px;height: 100px;background: deeppink;" @click.stop="test6()"></div>
+    </div>
+
+    <a href="http://www.baidu.com" @click.prevent="test7">去百度</a>
+
+    <h2>3：按键修饰符</h2>
+    <input type="text" @keyup="test8">
+    <input type="text" @keyup.enter="test9">
+  </div>
+
+  <script type="text/javascript" src="../js/vue.js"></script>
+  <script>
+    new Vue({
+      el: "#demo",
+      data: {
+
+      },
+      methods: {
+        test1() {
+          alert(1);
+        },
+        test2(msg) {
+          alert(msg);
+        },
+        test3(event) {
+          console.log(event.target.innerHTML)
+        },
+        test4(number, event) {
+          console.log(number + "------" + event.target.innerHTML)
+        },
+        test5() {
+          alert("out");
+        },
+        test6() {
+          // event.stopPropagation()
+          alert('inner');
+        },
+        test7() {
+          // event.preventDefault();
+          alert('7');
+        },
+        test8(event) {
+          if (event.keyCode === 13) {
+            console.log(event.target.value)
+          }
+        },
+        test9() {
+          console.log(event.target.value)
+        }
+      },
+    })
+  </script>
+</body>
+
+</html>
